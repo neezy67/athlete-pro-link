@@ -16,17 +16,17 @@ import { professionals } from "@/data/professionals";
 
 const Search = () => {
   const [filters, setFilters] = useState({
-    type: "",
+    type: "all",
     location: "",
     budget: "",
-    rating: "",
+    rating: "all",
   });
 
   const filteredProfessionals = professionals.filter((pro) => {
-    if (filters.type && pro.type !== filters.type) return false;
+    if (filters.type && filters.type !== "all" && pro.type !== filters.type) return false;
     if (filters.location && !pro.location.toLowerCase().includes(filters.location.toLowerCase())) return false;
     if (filters.budget && pro.price > parseInt(filters.budget)) return false;
-    if (filters.rating && pro.rating < parseFloat(filters.rating)) return false;
+    if (filters.rating && filters.rating !== "all" && pro.rating < parseFloat(filters.rating)) return false;
     return true;
   });
 
@@ -62,7 +62,7 @@ const Search = () => {
                   <SelectValue placeholder="Type de professionnel" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Tous les types</SelectItem>
+                  <SelectItem value="all">Tous les types</SelectItem>
                   <SelectItem value="Coach">Coach</SelectItem>
                   <SelectItem value="Kinésithérapeute">Kinésithérapeute</SelectItem>
                   <SelectItem value="Préparateur Physique">Préparateur Physique</SelectItem>
@@ -90,7 +90,7 @@ const Search = () => {
                   <SelectValue placeholder="Note minimum" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Toutes les notes</SelectItem>
+                  <SelectItem value="all">Toutes les notes</SelectItem>
                   <SelectItem value="4.5">4.5+ étoiles</SelectItem>
                   <SelectItem value="4.0">4.0+ étoiles</SelectItem>
                   <SelectItem value="3.5">3.5+ étoiles</SelectItem>
@@ -98,12 +98,12 @@ const Search = () => {
               </Select>
             </div>
 
-            {(filters.type || filters.location || filters.budget || filters.rating) && (
+            {(filters.type !== "all" || filters.location || filters.budget || filters.rating !== "all") && (
               <Button
                 variant="ghost"
                 size="sm"
                 className="mt-4"
-                onClick={() => setFilters({ type: "", location: "", budget: "", rating: "" })}
+                onClick={() => setFilters({ type: "all", location: "", budget: "", rating: "all" })}
               >
                 Réinitialiser les filtres
               </Button>
@@ -132,7 +132,7 @@ const Search = () => {
               </p>
               <Button
                 variant="outline"
-                onClick={() => setFilters({ type: "", location: "", budget: "", rating: "" })}
+                onClick={() => setFilters({ type: "all", location: "", budget: "", rating: "all" })}
               >
                 Réinitialiser les filtres
               </Button>
